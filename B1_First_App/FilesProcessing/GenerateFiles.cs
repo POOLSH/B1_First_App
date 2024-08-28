@@ -35,14 +35,16 @@ namespace B1_First_App.Generate
                 // Запись случайных данных в файл
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    for (int j = 0; j < 100000; j++) 
+                    for (int j = 0; j < 100000; j++)
                     {
                         // Генерация случайных данных для каждой строки
                         string randomDate = GenerateRandomDate(random);
                         string randomLatinSymb = GenerateRandomString(random, 10, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
                         string randomRussianSymb = GenerateRandomString(random, 10, "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ");
                         int randomEvenInt = random.Next(1, 50000000) * 2;
-                        double randomDouble = random.NextDouble() * 20;
+
+                        // Генерация случайного double и ограничение до 8 знаков после запятой
+                        double randomDouble = Math.Round(random.NextDouble() * 20, 8);
 
                         // Формирование строки данных для записи в файл
                         string resultLine = $"{randomDate}||{randomLatinSymb}||{randomRussianSymb}||{randomEvenInt}||{randomDouble}\n";
@@ -52,9 +54,11 @@ namespace B1_First_App.Generate
                     }
                 }
             }
-
             // Вывод сообщения об успешной генерации данных
             Console.WriteLine("Generated successfully");
         }
+
+        
+        
     }
 }
