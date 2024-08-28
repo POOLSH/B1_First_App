@@ -1,44 +1,46 @@
 ﻿using System;
 using System.IO;
+using B1_First_App.FilesProcessing;
+using B1_First_App.Generate;
 
 class Program
 {
     static void Main()
     {
+        GenerateFiles generateFiles = new GenerateFiles();
+        MergingFiles mergingFiles = new MergingFiles();
+        TxtToDB txtToDB = new TxtToDB();
         Random random = new Random();
-
-        for (int i = 0; i < 100; i++)
+        while (true)
         {
-            string filePath = $"file_{i}.txt";
+            Console.WriteLine("Select:");
+            Console.WriteLine("1. Generate files");
+            Console.WriteLine("2. Merge files");
+            Console.WriteLine("3. Import files to DB");
+            Console.WriteLine("4. Quit");
 
-            using (StreamWriter writer = new StreamWriter(filePath))
+            string choice = Console.ReadLine();
+
+            switch (choice)
             {
-                for (int j = 0; j < 100000; j++)
-                {
-                    string randomDate = GenerateRandomDate(random);
-                    string randomLatinSymb = GenerateRandomString(random,10, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
-                    string randomRussianSymb = GenerateRandomString(random, 10, "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ");
-                    int randomEvenInt = random.Next(1,50000000)*2;
-                    double randomDouble = random.NextDouble()*20;
-                    string resultLine = $"{randomDate}||{randomLatinSymb}||{randomRussianSymb}||{randomEvenInt}||{randomDouble}\n"; 
-                    writer.Write(resultLine);
-                }
+                case "1":
+                    generateFiles.Generate(random);
+                    break;
+                case "2":
+                    mergingFiles.Merge();
+                    break;
+                case "3":
+                    txtToDB.Transaction();
+                    break;
+                case "4":
+                    return;
+                default:
+                    Console.WriteLine("Неверный выбор. Пожалуйста, выберите снова.");
+                    break;
             }
         }
-        Console.WriteLine("Generated Successfully");
     }
-    static string GenerateRandomString(Random random, int length, string symbs)
-    {
-        return new string(Enumerable.Repeat(symbs, length)
-            .Select(s => s[random.Next(s.Length)]).ToArray());
-    }
-
-    static string GenerateRandomDate(Random random)
-    {
-        DateTime startDate = new DateTime(2019,1,1);
-        int range=(DateTime.Now-startDate).Days;
-        return startDate.AddDays(random.Next(range)).ToString("dd.MM.yyyy");
-    }
+   
 }
 
     
